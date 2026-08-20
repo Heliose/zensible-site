@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Zensible digital design system for web experiences.">
+  <title>Zensible Design System</title>
+  <style>
+    :root {
+      --ink: #101217;
+      --night: #050505;
+      --navy: #000812;
+      --paper: #f5f4f0;
+      --paper-2: #e9e9e6;
+      --white: #ffffff;
+      --blue: #009dff;
+      --blue-mid: #0095d1;
+      --teal: #009776;
+      --lime: #d9ff83;
+      --violet: #8e7dff;
+      --coral: #ffa989;
+      --sky: #a9c8ff;
+      --mint: #b9f0db;
+      --pink: #f5b9d6;
+      --lavender: #d7d1ff;
+      --line: rgba(16, 18, 23, .15);
+      --line-dark: rgba(255, 255, 255, .18);
+      --muted: #62656d;
+      --muted-dark: rgba(255, 255, 255, .65);
+      --gradient-brand: linear-gradient(100deg, #009dff 0%, #0095d1 48%, #009776 100%);
+      --radius-xs: 8px;
+      --radius-sm: 14px;
+      --radius-md: 20px;
+      --radius-lg: 28px;
+      --radius-pill: 999px;
+      --shadow-sm: 0 12px 30px rgba(8, 10, 16, .10);
+      --shadow-lg: 0 28px 70px rgba(8, 10, 16, .18);
+      --ease-out: cubic-bezier(.22, 1, .36, 1);
+      --page: min(1480px, calc(100% - 40px));
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: Inter, "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea { font: inherit; }
+    button { color: inherit; }
+
+    .topbar {
+      position: fixed;
+      z-index: 50;
+      top: 16px;
+      left: 50%;
+      width: min(1460px, calc(100% - 32px));
+      min-height: 68px;
+      padding: 10px 12px 10px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: 18px;
+      background: rgba(5, 8, 14, .82);
+      color: var(--white);
+      box-shadow: 0 18px 46px rgba(0, 0, 0, .24);
+      backdrop-filter: blur(20px);
+      transform: translateX(-50%);
+    }
+    .brand { display: inline-flex; align-items: center; gap: 14px; }
+    .brand img { display: block; width: 146px; height: auto; }
+    .brand span {
+      padding-left: 14px;
+      border-left: 1px solid rgba(255, 255, 255, .22);
+      color: rgba(255, 255, 255, .62);
+      font: 10px "SFMono-Regular", Consolas, monospace;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .topnav { display: flex; align-items: center; gap: 7px; }
+    .topnav a {
+      padding: 11px 13px;
+      border-radius: 999px;
+      color: rgba(255, 255, 255, .7);
+      font-size: 12px;
+      transition: background .2s ease, color .2s ease;
+    }
+    .topnav a:hover, .topnav a.active { color: white; background: rgba(255, 255, 255, .1); }
+
+    .hero {
+      position: relative;
+      min-height: 760px;
+      margin: 12px;
+      padding: 160px clamp(24px, 6vw, 92px) 70px;
+      display: grid;
+      align-content: center;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: var(--radius-lg);
+      color: white;
+      background:
+        radial-gradient(circle at 82% 20%, rgba(0, 157, 255, .18), transparent 28%),
+        radial-gradient(circle at 72% 88%, rgba(0, 151, 118, .16), transparent 32%),
+        var(--night);
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: min(760px, 70vw);
+      aspect-ratio: 1;
+      right: -12%;
+      top: 4%;
+      border: 1px solid rgba(255, 255, 255, .13);
+      border-radius: 50%;
+      box-shadow: 0 0 0 70px rgba(255, 255, 255, .025), 0 0 0 140px rgba(255, 255, 255, .015);
+    }
+    .hero-copy { position: relative; z-index: 1; max-width: 1120px; }
+    .kicker, .section-label, .spec-label {
+      font: 11px "SFMono-Regular", Consolas, monospace;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .kicker { margin-bottom: 26px; color: var(--lime); }
+    h1 {
+      max-width: 1050px;
+      margin: 0;
+      font-size: clamp(64px, 8vw, 132px);
+      line-height: .88;
+      letter-spacing: -.075em;
+      font-weight: 540;
+    }
+    .gradient-text {
+      background: var(--gradient-brand);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .hero-copy > p {
+      max-width: 650px;
+      margin: 34px 0 0;
+      color: rgba(255, 255, 255, .7);
+      font-size: 18px;
+      line-height: 1.55;
+    }
+    .hero-meta {
+      position: absolute;
+      z-index: 1;
+      right: clamp(24px, 6vw, 92px);
+      bottom: 54px;
+      display: grid;
+      gap: 8px;
+      color: rgba(255, 255, 255, .56);
+      text-align: right;
+      font: 10px "SFMono-Regular", Consolas, monospace;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    .layout { width: var(--page); margin: 0 auto; }
+    .section {
+      scroll-margin-top: 110px;
+      padding: clamp(86px, 10vw, 150px) 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .section:last-child { border-bottom: 0; }
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 420px);
+      gap: 50px;
+      align-items: end;
+      margin-bottom: 55px;
+    }
+    .section-label { margin-bottom: 18px; color: var(--muted); }
+    h2 {
+      max-width: 920px;
+      margin: 0;
+      font-size: clamp(42px, 5.5vw, 84px);
+      line-height: .95;
+      letter-spacing: -.065em;
+      font-weight: 540;
+    }
+    .section-intro { margin: 0; color: var(--muted); font-size: 17px; line-height: 1.55; }
+    .panel {
+      padding: clamp(24px, 4vw, 52px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, .56);
+      box-shadow: var(--shadow-sm);
+    }
+    .dark-panel { color: white; border-color: var(--line-dark); background: var(--night); }
+    .spec-label { margin-bottom: 18px; color: var(--muted); }
+    .dark-panel .spec-label { color: rgba(255, 255, 255, .55); }
+
+    .swatch-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+    .swatch {
+      min-height: 185px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid rgba(16, 18, 23, .13);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: transform .3s var(--ease-out), box-shadow .3s ease;
+    }
+    .swatch:hover { transform: translateY(-5px); box-shadow: var(--shadow-sm); }
+    .swatch strong { font-size: 18px; letter-spacing: -.035em; }
+    .swatch code { font: 11px "SFMono-Regular", Consolas, monospace; opacity: .66; }
+    .swatch.dark { color: white; border-color: rgba(255, 255, 255, .18); }
+    .gradient-sample {
+      min-height: 220px;
+      margin-top: 14px;
+      padding: clamp(24px, 4vw, 50px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-radius: var(--radius-md);
+      color: white;
+      background: var(--gradient-brand);
+    }
+    .gradient-sample b { max-width: 800px; font-size: clamp(36px, 6vw, 78px); line-height: .9; letter-spacing: -.065em; }
+    .gradient-sample code { font: 11px "SFMono-Regular", Consolas, monospace; }
+
+    .type-stack { display: grid; gap: 0; }
+    .type-row {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 28px;
+      align-items: baseline;
+      padding: 30px 0;
+      border-top: 1px solid var(--line);
+    }
+    .type-row:last-child { border-bottom: 1px solid var(--line); }
+    .type-meta { color: var(--muted); font: 10px/1.6 "SFMono-Regular", Consolas, monospace; text-transform: uppercase; }
+    .display-xl { font-size: clamp(54px, 7vw, 104px); line-height: .88; letter-spacing: -.075em; font-weight: 540; }
+    .display-l { font-size: clamp(40px, 5vw, 72px); line-height: .94; letter-spacing: -.065em; font-weight: 540; }
+    .heading-m { font-size: 36px; line-height: 1; letter-spacing: -.05em; font-weight: 580; }
+    .body-l { max-width: 720px; font-size: 19px; line-height: 1.55; }
+    .body-m { max-width: 650px; color: var(--muted); font-size: 15px; line-height: 1.55; }
+    .mono { font: 11px "SFMono-Regular", Consolas, monospace; letter-spacing: .15em; text-transform: uppercase; }
+
+    .token-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .token-card { min-height: 180px; padding: 22px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: white; }
+    .token-card h3 { margin: 0 0 18px; font-size: 22px; letter-spacing: -.04em; }
+    .token-list { display: grid; gap: 10px; }
+    .token { display: flex; justify-content: space-between; gap: 16px; color: var(--muted); font: 11px "SFMono-Regular", Consolas, monospace; }
+    .radius-demo { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 24px; }
+    .radius-demo div { aspect-ratio: 1.4; display: grid; place-items: center; border: 1px solid var(--line); background: var(--paper-2); font-size: 11px; }
+
+    .button-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .btn {
+      min-height: 50px;
+      padding: 0 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      border: 1px solid transparent;
+      border-radius: var(--radius-pill);
+      background: var(--ink);
+      color: white;
+      font-weight: 680;
+      cursor: pointer;
+      transition: transform .25s var(--ease-out), box-shadow .25s ease, background .2s ease;
+    }
+    .btn:hover { transform: translateY(-3px); box-shadow: 0 14px 28px rgba(16, 18, 23, .18); }
+    .btn:focus-visible, input:focus-visible, textarea:focus-visible, .swatch:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+    .btn.secondary { color: var(--ink); border-color: var(--line); background: white; }
+    .btn.gradient { border: 0; background: var(--gradient-brand); }
+    .btn.ghost { color: var(--ink); border-color: var(--ink); background: transparent; }
+    .btn.icon { width: 50px; padding: 0; }
+    .btn[disabled] { opacity: .38; cursor: not-allowed; transform: none; box-shadow: none; }
+    .component-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .component-card { padding: 28px; border: 1px solid var(--line); border-radius: var(--radius-md); background: white; }
+    .component-card h3 { margin: 0 0 8px; font-size: 25px; letter-spacing: -.045em; }
+    .component-card > p { margin: 0 0 26px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+
+    .mini-nav {
+      min-height: 68px;
+      padding: 9px 10px 9px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      border: 1px solid var(--line-dark);
+      border-radius: 16px;
+      color: white;
+      background: rgba(5, 8, 14, .92);
+      box-shadow: var(--shadow-lg);
+    }
+    .mini-brand { font-size: 21px; font-weight: 740; letter-spacing: -.05em; }
+    .mini-links { display: flex; gap: 18px; align-items: center; color: rgba(255, 255, 255, .66); font-size: 12px; }
+    .mini-links b { padding: 12px 15px; border-radius: 999px; color: var(--ink); background: white; }
+    .agent-card {
+      min-height: 330px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid rgba(16, 18, 23, .28);
+      background: var(--lime);
+      transform-style: preserve-3d;
+      transition: transform .2s ease, box-shadow .25s ease;
+    }
+    .agent-card:hover { box-shadow: 0 28px 55px rgba(0, 0, 0, .18); }
+    .agent-card small, .agent-card i { font: 10px "SFMono-Regular", Consolas, monospace; letter-spacing: .13em; text-transform: uppercase; }
+    .agent-card i { width: 29px; height: 29px; display: grid; place-items: center; margin-left: auto; border: 1px solid rgba(16, 18, 23, .3); border-radius: 50%; font-style: normal; }
+    .agent-card strong { max-width: 330px; margin-top: auto; font-size: 45px; line-height: .88; letter-spacing: -.07em; }
+    .metric-card { min-height: 260px; padding: 26px; display: flex; flex-direction: column; border: 1px solid var(--line-dark); border-radius: var(--radius-md); color: white; background: var(--ink); }
+    .metric-card small { color: var(--lime); }
+    .metric-card b { margin-top: auto; font-size: 56px; line-height: .9; letter-spacing: -.065em; }
+    .metric-card p { max-width: 340px; margin: 16px 0 0; color: var(--muted-dark); line-height: 1.5; }
+
+    .form { display: grid; gap: 14px; }
+    .field { display: grid; gap: 8px; }
+    .field label { color: var(--muted); font: 10px "SFMono-Regular", Consolas, monospace; letter-spacing: .12em; text-transform: uppercase; }
+    .field input, .field textarea {
+      width: 100%;
+      min-height: 52px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      color: var(--ink);
+      background: var(--paper);
+      outline: 0;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+    .field textarea { min-height: 120px; resize: vertical; }
+    .field input:focus, .field textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(0, 157, 255, .12); }
+
+    .motion-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .motion-card { padding: 22px; border-radius: var(--radius-sm); color: white; background: var(--ink); }
+    .motion-card b { display: block; margin-bottom: 30px; font-size: 20px; }
+    .motion-card code { color: var(--lime); font: 11px "SFMono-Regular", Consolas, monospace; }
+    .motion-dot { width: 48px; height: 48px; margin-top: 20px; border-radius: 50%; background: var(--gradient-brand); transition: transform .55s var(--ease-out); }
+    .motion-card:hover .motion-dot { transform: translateX(calc(100% + 50px)) rotate(180deg); }
+
+    .do-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .do-card { min-height: 230px; padding: 26px; border-radius: var(--radius-md); }
+    .do-card.good { border: 1px solid rgba(0, 151, 118, .35); background: rgba(185, 240, 219, .48); }
+    .do-card.avoid { border: 1px solid rgba(255, 169, 137, .5); background: rgba(255, 169, 137, .24); }
+    .do-card b { display: block; margin-bottom: 50px; font-size: 25px; letter-spacing: -.04em; }
+    .do-card ul { margin: 0; padding-left: 18px; color: #4e5158; line-height: 1.7; }
+
+    .code-block {
+      margin: 0;
+      padding: 24px;
+      overflow: auto;
+      border: 1px solid var(--line-dark);
+      border-radius: var(--radius-md);
+      color: #d9ff83;
+      background: #080a10;
+      font: 12px/1.75 "SFMono-Regular", Consolas, monospace;
+      white-space: pre;
+    }
+    footer { padding: 50px 20px 70px; color: var(--muted); text-align: center; font-size: 12px; }
+    .toast {
+      position: fixed;
+      z-index: 80;
+      right: 22px;
+      bottom: 22px;
+      padding: 13px 16px;
+      border-radius: 999px;
+      color: white;
+      background: var(--ink);
+      box-shadow: var(--shadow-lg);
+      font-size: 12px;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity .25s ease, transform .25s var(--ease-out);
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: none; }
+
+    @media (max-width: 980px) {
+      .topnav a:not(:last-child), .brand span { display: none; }
+      .hero { min-height: 700px; padding-left: 30px; padding-right: 30px; }
+      .hero-meta { display: none; }
+      .section-head, .component-grid { grid-template-columns: 1fr; }
+      .swatch-grid { grid-template-columns: repeat(2, 1fr); }
+      .token-grid, .motion-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 650px) {
+      :root { --page: calc(100% - 28px); }
+      .topbar { top: 10px; min-height: 60px; }
+      .brand img { width: 124px; }
+      .topnav a:last-child { padding: 10px 12px; background: white; color: var(--ink); }
+      .hero { min-height: 680px; margin: 8px; padding: 120px 20px 42px; border-radius: 20px; }
+      h1 { font-size: 56px; }
+      .hero-copy > p { font-size: 16px; }
+      .section { padding: 82px 0; }
+      .swatch-grid, .do-grid { grid-template-columns: 1fr; }
+      .type-row { grid-template-columns: 1fr; gap: 12px; }
+      .radius-demo { grid-template-columns: repeat(2, 1fr); }
+      .mini-links span { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Zensible design system home">
+      <img src="logo.png" alt="Zensible">
+      <span>Design system · 01</span>
+    </a>
+    <nav class="topnav" aria-label="Design system sections">
+      <a href="#foundation">Foundation</a>
+      <a href="#type">Type</a>
+      <a href="#components">Components</a>
+      <a href="#guidelines">Guidelines</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="kicker">Zensible digital design system</div>
+        <h1>Designed for <span class="gradient-text">accountable action.</span></h1>
+        <p>A practical visual language for enterprise HR experiences: assured, intelligent, human, and built to make complex operational work feel clear.</p>
+      </div>
+      <div class="hero-meta"><span>Version 1.0</span><span>Web · Marketing · Product</span><span>Updated August 2026</span></div>
+    </section>
+
+    <div class="layout">
+      <section class="section" id="foundation">
+        <div class="section-head">
+          <div><div class="section-label">01 · Foundation</div><h2>Color with purpose.</h2></div>
+          <p class="section-intro">Zensible uses a high-confidence blue-to-teal gradient for brand expression, quiet neutrals for structure, and selective bright accents for status and interaction.</p>
+        </div>
+
+        <div class="swatch-grid" aria-label="Core colors">
+          <button class="swatch dark" style="background:#050505" data-copy="#050505"><strong>Night</strong><code>#050505</code></button>
+          <button class="swatch dark" style="background:#101217" data-copy="#101217"><strong>Ink</strong><code>#101217</code></button>
+          <button class="swatch" style="background:#f5f4f0" data-copy="#F5F4F0"><strong>Paper</strong><code>#F5F4F0</code></button>
+          <button class="swatch" style="background:#e9e9e6" data-copy="#E9E9E6"><strong>Paper 02</strong><code>#E9E9E6</code></button>
+          <button class="swatch dark" style="background:#009dff" data-copy="#009DFF"><strong>Zensible Blue</strong><code>#009DFF</code></button>
+          <button class="swatch dark" style="background:#0095d1" data-copy="#0095D1"><strong>Bridge Blue</strong><code>#0095D1</code></button>
+          <button class="swatch dark" style="background:#009776" data-copy="#009776"><strong>Zensible Teal</strong><code>#009776</code></button>
+          <button class="swatch" style="background:#d9ff83" data-copy="#D9FF83"><strong>Signal Lime</strong><code>#D9FF83</code></button>
+        </div>
+        <div class="gradient-sample">
+          <code>Brand gradient · 100deg · Blue 0% → Bridge 48% → Teal 100%</code>
+          <b>At Zensible, we make HR work.</b>
+        </div>
+
+        <div class="panel" style="margin-top:28px">
+          <div class="spec-label">Supporting agent-card palette</div>
+          <div class="swatch-grid">
+            <button class="swatch" style="background:#a9c8ff" data-copy="#A9C8FF"><strong>Sky</strong><code>#A9C8FF</code></button>
+            <button class="swatch" style="background:#ffa989" data-copy="#FFA989"><strong>Coral</strong><code>#FFA989</code></button>
+            <button class="swatch" style="background:#d7d1ff" data-copy="#D7D1FF"><strong>Lavender</strong><code>#D7D1FF</code></button>
+            <button class="swatch" style="background:#b9f0db" data-copy="#B9F0DB"><strong>Mint</strong><code>#B9F0DB</code></button>
+            <button class="swatch" style="background:#f5b9d6" data-copy="#F5B9D6"><strong>Pink</strong><code>#F5B9D6</code></button>
+            <button class="swatch" style="background:#fbf8f2" data-copy="#FBF8F2"><strong>Warm White</strong><code>#FBF8F2</code></button>
+            <button class="swatch" style="background:#d5d0ff" data-copy="#D5D0FF"><strong>Soft Violet</strong><code>#D5D0FF</code></button>
+            <button class="swatch" style="background:#d9ff83" data-copy="#D9FF83"><strong>Lime</strong><code>#D9FF83</code></button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="type">
+        <div class="section-head">
+          <div><div class="section-label">02 · Typography</div><h2>Direct, editorial, precise.</h2></div>
+          <p class="section-intro">Use a neutral grotesk for clarity and a compact monospace for system labels. Large headlines carry tight tracking; body copy stays calm and readable.</p>
+        </div>
+        <div class="type-stack">
+          <div class="type-row"><div class="type-meta">Display XL<br>88–132 / 0.88<br>−7.5%</div><div class="display-xl">HR work, done.</div></div>
+          <div class="type-row"><div class="type-meta">Display L<br>56–84 / 0.94<br>−6.5%</div><div class="display-l">Agentic co-worker.</div></div>
+          <div class="type-row"><div class="type-meta">Heading M<br>36 / 1.0<br>−5%</div><div class="heading-m">Managed execution across your stack.</div></div>
+          <div class="type-row"><div class="type-meta">Body L<br>19 / 1.55</div><div class="body-l">Ready-to-run agents execute HR work across the systems teams already use—with context, controls, and accountability.</div></div>
+          <div class="type-row"><div class="type-meta">Body M<br>15 / 1.55</div><div class="body-m">Use this style for supporting explanations, component descriptions, secondary interface copy, and longer passages.</div></div>
+          <div class="type-row"><div class="type-meta">Mono label<br>11 / auto<br>+15%</div><div class="mono">Agentic co-worker · Operational status</div></div>
+        </div>
+      </section>
+
+      <section class="section" id="tokens">
+        <div class="section-head">
+          <div><div class="section-label">03 · Layout tokens</div><h2>Space creates confidence.</h2></div>
+          <p class="section-intro">Generous section rhythm and restrained component spacing make dense enterprise concepts feel approachable. Use the 4px base grid consistently.</p>
+        </div>
+        <div class="token-grid">
+          <article class="token-card"><h3>Spacing</h3><div class="token-list"><div class="token"><span>space-1</span><b>4px</b></div><div class="token"><span>space-2</span><b>8px</b></div><div class="token"><span>space-3</span><b>12px</b></div><div class="token"><span>space-4</span><b>16px</b></div><div class="token"><span>space-6</span><b>24px</b></div><div class="token"><span>space-8</span><b>32px</b></div><div class="token"><span>space-12</span><b>48px</b></div><div class="token"><span>space-20</span><b>80px</b></div></div></article>
+          <article class="token-card"><h3>Container</h3><div class="token-list"><div class="token"><span>page-max</span><b>1480px</b></div><div class="token"><span>page-gutter</span><b>20–92px</b></div><div class="token"><span>section-y</span><b>86–150px</b></div><div class="token"><span>copy-max</span><b>650px</b></div><div class="token"><span>display-max</span><b>1050px</b></div></div></article>
+          <article class="token-card"><h3>Elevation</h3><div class="token-list"><div class="token"><span>line-light</span><b>15%</b></div><div class="token"><span>line-dark</span><b>18%</b></div><div class="token"><span>shadow-sm</span><b>12 / 30</b></div><div class="token"><span>shadow-lg</span><b>28 / 70</b></div><div class="token"><span>glass-blur</span><b>20px</b></div></div></article>
+        </div>
+        <div class="panel" style="margin-top:14px"><div class="spec-label">Radius scale</div><div class="radius-demo"><div style="border-radius:8px">8px</div><div style="border-radius:14px">14px</div><div style="border-radius:20px">20px</div><div style="border-radius:28px">28px</div></div></div>
+      </section>
+
+      <section class="section" id="components">
+        <div class="section-head">
+          <div><div class="section-label">04 · Components</div><h2>Clear actions, expressive surfaces.</h2></div>
+          <p class="section-intro">Components balance enterprise trust with a more editorial brand personality. Controls stay simple; moments of expression live in cards, motion, and gradients.</p>
+        </div>
+
+        <div class="component-card" style="margin-bottom:16px">
+          <h3>Buttons</h3><p>Use one primary action per section. Arrow glyphs signal forward movement or an external destination.</p>
+          <div class="button-row">
+            <button class="btn">See the product <span>↗</span></button>
+            <button class="btn gradient">Talk to us <span>↗</span></button>
+            <button class="btn secondary">Learn more</button>
+            <button class="btn ghost">View systems</button>
+            <button class="btn icon" aria-label="Next">→</button>
+            <button class="btn" disabled>Unavailable</button>
+          </div>
+        </div>
+
+        <div class="component-card dark-panel" style="margin-bottom:16px">
+          <h3>Floating navigation</h3><p style="color:var(--muted-dark)">Persistent glass navigation maintains orientation across long-form pages.</p>
+          <div class="mini-nav"><span class="mini-brand">zensible</span><div class="mini-links"><span>Product</span><span>Company</span><span>Resources</span><b>Talk to us</b></div></div>
+        </div>
+
+        <div class="component-grid">
+          <article class="component-card"><h3>Agent card</h3><p>Bright, tactile work surfaces. The active center card stays upright while surrounding cards follow the arc.</p><div class="agent-card" data-tilt><small>Join · 01</small><i>↗</i><strong>Onboarding</strong></div></article>
+          <article class="component-card"><h3>Outcome card</h3><p>Dark, high-contrast blocks make benefits feel accountable and measurable.</p><div class="metric-card"><small class="mono">Business impact · 01</small><b>Faster</b><p>Complete complex HR requests without chasing hand-offs.</p></div></article>
+          <article class="component-card"><h3>Text fields</h3><p>Quiet surfaces, explicit labels, and a visible blue focus ring.</p><form class="form"><div class="field"><label for="work-email">Work email</label><input id="work-email" type="email" placeholder="you@company.com"></div><div class="field"><label for="hr-work">HR work to automate</label><textarea id="hr-work" placeholder="Tell us where your team spends time..."></textarea></div><button class="btn gradient" type="button">Start a conversation</button></form></article>
+          <article class="component-card"><h3>Status patterns</h3><p>Signal state with color, shape, and text—never with color alone.</p><div style="display:grid;gap:10px"><div style="padding:16px;border-radius:12px;background:#d9ff83"><b>✓ Ready to run</b><div style="margin-top:5px;font-size:13px">Controls validated and workflow active.</div></div><div style="padding:16px;border-radius:12px;background:#a9c8ff"><b>↗ Approval needed</b><div style="margin-top:5px;font-size:13px">One human decision is holding execution.</div></div><div style="padding:16px;border-radius:12px;background:#ffa989"><b>! Exception detected</b><div style="margin-top:5px;font-size:13px">Route to the accountable owner.</div></div></div></article>
+        </div>
+      </section>
+
+      <section class="section" id="motion">
+        <div class="section-head">
+          <div><div class="section-label">05 · Motion</div><h2>Physical, controlled, responsive.</h2></div>
+          <p class="section-intro">Motion should explain hierarchy and input—not decorate. Use decisive easing, short feedback transitions, and always respect reduced-motion preferences.</p>
+        </div>
+        <div class="motion-grid">
+          <article class="motion-card"><b>Interface feedback</b><code>180–250ms · ease</code><div class="motion-dot"></div></article>
+          <article class="motion-card"><b>Layout transition</b><code>350–550ms · ease-out</code><div class="motion-dot"></div></article>
+          <article class="motion-card"><b>Page reveal</b><code>700–800ms · ease-out</code><div class="motion-dot"></div></article>
+        </div>
+      </section>
+
+      <section class="section" id="guidelines">
+        <div class="section-head">
+          <div><div class="section-label">06 · Usage guidance</div><h2>Confident, never chaotic.</h2></div>
+          <p class="section-intro">The system works when expressive moments are surrounded by quiet structure. Maintain contrast, hierarchy, and operational clarity at every breakpoint.</p>
+        </div>
+        <div class="do-grid">
+          <article class="do-card good"><b>Do</b><ul><li>Use the brand gradient for meaningful emphasis.</li><li>Keep body copy on simple, high-contrast surfaces.</li><li>Reserve bright card colors for distinct work categories.</li><li>Keep the active carousel card upright.</li><li>Pair motion with keyboard and touch support.</li></ul></article>
+          <article class="do-card avoid"><b>Avoid</b><ul><li>Using several gradients in one viewport.</li><li>Placing long copy directly on busy imagery.</li><li>Mixing unrelated corner-radius styles.</li><li>Using shadows without a hierarchy purpose.</li><li>Hiding status meaning in color alone.</li></ul></article>
+        </div>
+
+        <div class="panel" style="margin-top:16px">
+          <div class="spec-label">Starter tokens</div>
+          <pre class="code-block"><code>:root {
+  --zensible-blue: #009dff;
+  --zensible-teal: #009776;
+  --zensible-gradient: linear-gradient(100deg, #009dff 0%, #0095d1 48%, #009776 100%);
+  --ink: #101217;
+  --night: #050505;
+  --paper: #f5f4f0;
+  --signal-lime: #d9ff83;
+  --radius-card: 20px;
+  --radius-section: 28px;
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+}</code></pre>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>Zensible Design System · Agentic co-worker · Version 1.0</footer>
+  <div class="toast" role="status" aria-live="polite">Color copied</div>
+
+  <script>
+    const toast = document.querySelector('.toast');
+    let toastTimer;
+    document.querySelectorAll('[data-copy]').forEach(swatch => {
+      swatch.addEventListener('click', async () => {
+        const value = swatch.dataset.copy;
+        try { await navigator.clipboard.writeText(value); } catch { /* Clipboard may be unavailable on local files. */ }
+        toast.textContent = `${value} copied`;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 1400);
+      });
+    });
+
+    const sections = [...document.querySelectorAll('.section[id]')];
+    const navLinks = [...document.querySelectorAll('.topnav a')];
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`));
+      });
+    }, { rootMargin: '-25% 0px -65% 0px' });
+    sections.forEach(section => observer.observe(section));
+
+    const tilt = document.querySelector('[data-tilt]');
+    const hoverCapable = matchMedia('(hover: hover)').matches;
+    if (tilt && hoverCapable) {
+      tilt.addEventListener('pointermove', event => {
+        const rect = tilt.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width - .5;
+        const y = (event.clientY - rect.top) / rect.height - .5;
+        tilt.style.transform = `perspective(850px) rotateX(${-y * 8}deg) rotateY(${x * 10}deg) translateZ(8px)`;
+      });
+      tilt.addEventListener('pointerleave', () => { tilt.style.transform = ''; });
+    }
+  </script>
+</body>
+</html>
